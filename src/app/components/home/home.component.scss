@@ -1,0 +1,63 @@
+.home-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #3f51b5 0%, #9c27b0 100%);
+  border-radius: 16px;
+  color: white;
+  margin-bottom: 32px;
+
+  h1 { font-size: 3rem; margin: 0 0 12px; }
+  .highlight { color: #ffeb3b; }
+  .subtitle { font-size: 1.2rem; opacity: 0.9; margin-bottom: 32px; }
+
+  .hero-actions {
+    display: flex; gap: 16px; justify-content: center;
+    button { font-size: 1rem; padding: 8px 24px; }
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+
+  .stat-card {
+    text-align: center;
+    padding: 8px;
+    .stat-icon { font-size: 2rem; margin-bottom: 8px; }
+    .stat-value { font-size: 2.5rem; font-weight: 700; color: #3f51b5; }
+    .stat-label { color: #666; font-size: 0.9rem; }
+  }
+}
+
+.section {
+  margin-bottom: 40px;
+  h2 { font-size: 1.8rem; margin-bottom: 20px; color: #333; }
+}
+
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+
+  .book-card {
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    &:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+    .rating { font-size: 0.9rem; color: #666; margin-top: 8px; }
+    mat-chip.available { background: #e8f5e9; color: #2e7d32; }
+    mat-chip.unavailable { background: #ffebee; color: #c62828; }
+  }
+}
+
+.quick-links .link-grid {
+  display: flex; flex-wrap: wrap; gap: 16px;
+  a { font-size: 1rem; padding: 12px 24px; text-decoration: none; }
+}

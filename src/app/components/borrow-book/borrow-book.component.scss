@@ -1,0 +1,29 @@
+.borrow-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px;
+  h1 { margin-bottom: 4px; }
+  .subtitle { color: #666; margin-bottom: 24px; }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    @media (max-width: 768px) { grid-template-columns: 1fr; }
+  }
+
+  .full-width { width: 100%; margin-bottom: 8px; }
+  .submit-btn { width: 100%; margin-top: 8px; }
+  .copies-badge { font-size: 0.8rem; color: #666; }
+
+  .preview-card {
+    h3 { font-size: 1.4rem; margin: 0; }
+    .author { color: #666; margin: 4px 0 12px; }
+    .desc { color: #555; line-height: 1.6; margin: 12px 0; }
+    .rating { color: #666; font-size: 0.9rem; margin-top: 8px; }
+    .chip-available { background: #e8f5e9 !important; color: #2e7d32 !important; }
+    &.empty { text-align: center; padding: 20px;
+      .empty-icon { font-size: 48px; width: 48px; height: 48px; color: #ccc; margin-bottom: 16px; }
+    }
+  }
+}

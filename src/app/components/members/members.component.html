@@ -1,0 +1,84 @@
+<div class="members-container">
+  <div class="page-header">
+    <h1>👥 Members</h1>
+    <button mat-raised-button color="primary" (click)="toggleAddForm()">
+      <mat-icon>{{ showAddForm ? 'close' : 'person_add' }}</mat-icon>
+      {{ showAddForm ? 'Cancel' : 'Add Member' }}
+    </button>
+  </div>
+
+  <!-- Template-Driven Add Form -->
+  <mat-card *ngIf="showAddForm" class="add-form-card">
+    <mat-card-header><mat-card-title>New Member Registration</mat-card-title></mat-card-header>
+    <mat-card-content>
+      <form #memberForm="ngForm" (ngSubmit)="onAddMember()">
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Full Name</mat-label>
+            <input matInput name="name" [(ngModel)]="newMember.name" required minlength="2" #name="ngModel">
+            <mat-error *ngIf="name.invalid && name.touched">Name must be at least 2 characters</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Email Address</mat-label>
+            <input matInput type="email" name="email" [(ngModel)]="newMember.email" required email #email="ngModel">
+            <mat-error *ngIf="email.errors?.['required'] && email.touched">Email is required</mat-error>
+            <mat-error *ngIf="email.errors?.['email'] && email.touched">Enter a valid email</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Phone</mat-label>
+            <input matInput name="phone" [(ngModel)]="newMember.phone" required pattern="[0-9]{10}" #phone="ngModel">
+            <mat-error *ngIf="phone.invalid && phone.touched">Enter a valid 10-digit phone number</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Membership Expiry</mat-label>
+            <input matInput type="date" name="membershipExpiry" [(ngModel)]="newMember.membershipExpiry" required #expiry="ngModel">
+            <mat-error *ngIf="expiry.invalid && expiry.touched">Expiry date is required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <button mat-raised-button color="primary" type="submit"
+          [disabled]="memberForm.invalid || isSubmitting">
+          <mat-icon>save</mat-icon> Register Member
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Members Grid -->
+  <div class="members-grid">
+    <mat-card *ngFor="let member of members" class="member-card"
+      [ngClass]="!member.isActive ? 'inactive' : ''">
+      <mat-card-header>
+        <div mat-card-avatar class="avatar">{{ member.name.charAt(0) }}</div>
+        <mat-card-title>{{ member.name }}</mat-card-title>
+        <mat-card-subtitle>{{ member.email }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="member-meta">
+          <div><mat-icon>phone</mat-icon> {{ member.phone }}</div>
+          <div><mat-icon>event</mat-icon> Joined: {{ member.membershipDate | date:'mediumDate' }}</div>
+          <div [ngClass]="isMembershipExpired(member.membershipExpiry) ? 'expired' : 'valid'">
+            <mat-icon>card_membership</mat-icon>
+            Expiry: {{ member.membershipExpiry | date:'mediumDate' }}
+            <span *ngIf="isMembershipExpired(member.membershipExpiry)"> (Expired)</span>
+          </div>
+          <div>
+            <mat-icon>menu_book</mat-icon>
+            Active Borrows: {{ member.borrowedBooks.length }}
+          </div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <mat-chip [ngClass]="member.isActive ? 'chip-active' : 'chip-inactive'">
+          {{ member.isActive ? 'Active' : 'Inactive' }}
+        </mat-chip>
+        <button mat-icon-button color="warn" (click)="deleteMember(member.id)" matTooltip="Delete">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

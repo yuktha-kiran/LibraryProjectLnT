@@ -1,0 +1,79 @@
+<div class="home-container">
+  <!-- Hero Section -->
+  <div class="hero">
+    <h1>Welcome to <span class="highlight">LibraryMS</span></h1>
+    <p class="subtitle">Your digital gateway to thousands of books. Browse, borrow, and explore.</p>
+    <div class="hero-actions">
+      <button mat-raised-button color="primary" routerLink="/books">Browse Books</button>
+      <button mat-stroked-button routerLink="/borrow">Borrow a Book</button>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-icon">📚</div>
+        <div class="stat-value">{{ totalBooks }}</div>
+        <div class="stat-label">Total Books</div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="stat-card available">
+      <mat-card-content>
+        <div class="stat-icon">✅</div>
+        <div class="stat-value">{{ availableBooks }}</div>
+        <div class="stat-label">Available Now</div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="stat-card members">
+      <mat-card-content>
+        <div class="stat-icon">👥</div>
+        <div class="stat-value">3</div>
+        <div class="stat-label">Members</div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="stat-card genres">
+      <mat-card-content>
+        <div class="stat-icon">🏷️</div>
+        <div class="stat-value">5</div>
+        <div class="stat-label">Genres</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Popular Books -->
+  <section class="section">
+    <h2>🔥 Popular Books</h2>
+    <div class="books-grid">
+      <mat-card *ngFor="let book of popularBooks" class="book-card" [routerLink]="['/books', book.id]">
+        <mat-card-header>
+          <mat-card-title>{{ book.title }}</mat-card-title>
+          <mat-card-subtitle>{{ book.author }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-chip-listbox>
+            <mat-chip>{{ book.genre }}</mat-chip>
+            <mat-chip [class.available]="book.availableCopies > 0" [class.unavailable]="book.availableCopies === 0">
+              {{ book.availableCopies > 0 ? 'Available' : 'Borrowed' }}
+            </mat-chip>
+          </mat-chip-listbox>
+          <p class="rating">⭐ {{ book.rating }}/5</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button color="primary">View Details</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </section>
+
+  <!-- Quick Links -->
+  <section class="section quick-links">
+    <h2>Quick Actions</h2>
+    <div class="link-grid">
+      <a mat-raised-button color="primary" routerLink="/books">📖 View All Books</a>
+      <a mat-raised-button color="accent" routerLink="/borrow">➕ Borrow a Book</a>
+      <a mat-raised-button routerLink="/return">↩️ Return a Book</a>
+      <a mat-raised-button routerLink="/members">👤 Manage Members</a>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,102 @@
+<div class="book-list-container">
+  <div class="page-header">
+    <h1>📚 Book Catalogue</h1>
+    <button mat-raised-button color="primary" (click)="openAddBookDialog()">
+      <mat-icon>add</mat-icon> Add Book
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <mat-card class="filter-card">
+    <mat-card-content>
+      <div class="filters">
+        <mat-form-field appearance="outline">
+          <mat-label>Search</mat-label>
+          <input matInput [(ngModel)]="searchQuery" (input)="applyFilter()" placeholder="Title or Author...">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Genre</mat-label>
+          <mat-select [(ngModel)]="selectedGenre" (selectionChange)="applyFilter()">
+            <mat-option *ngFor="let genre of genres" [value]="genre">{{ genre }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Availability</mat-label>
+          <mat-select [(ngModel)]="filterAvailability" (selectionChange)="applyFilter()">
+            <mat-option value="All">All</mat-option>
+            <mat-option value="available">Available</mat-option>
+            <mat-option value="borrowed">Borrowed</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- Table -->
+  <mat-card *ngIf="!isLoading">
+    <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+        <td mat-cell *matCellDef="let book">
+          <strong>{{ book.title }}</strong>
+          <span *ngIf="book.isPopular" class="popular-badge">🔥 Popular</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="author">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Author</th>
+        <td mat-cell *matCellDef="let book">{{ book.author }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="genre">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Genre</th>
+        <td mat-cell *matCellDef="let book">
+          <mat-chip>{{ book.genre }}</mat-chip>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="year">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Year</th>
+        <td mat-cell *matCellDef="let book">{{ book.publishedYear }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="available">
+        <th mat-header-cell *matHeaderCellDef>Copies</th>
+        <td mat-cell *matCellDef="let book">
+          <span [ngClass]="book.availableCopies > 0 ? 'status-available' : 'status-borrowed'">
+            {{ book.availableCopies }}/{{ book.totalCopies }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="rating">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Rating</th>
+        <td mat-cell *matCellDef="let book">⭐ {{ book.rating }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let book">
+          <button mat-icon-button color="primary" [routerLink]="['/books', book.id]" matTooltip="View Details">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteBook(book.id)" matTooltip="Delete">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </mat-card>
+</div>

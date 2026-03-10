@@ -1,0 +1,32 @@
+/* Global Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
+}
+
+/* Material Snackbar custom styles */
+.snack-success .mdc-snackbar__surface {
+  background: #4caf50 !important;
+  color: white !important;
+}
+
+.snack-error .mdc-snackbar__surface {
+  background: #f44336 !important;
+  color: white !important;
+}
+
+.snack-info .mdc-snackbar__surface {
+  background: #2196f3 !important;
+  color: white !important;
+}
+
+/* Utility */
+.text-center { text-align: center; }
+.mt-16 { margin-top: 16px; }
+.mb-16 { margin-bottom: 16px; }

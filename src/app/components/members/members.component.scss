@@ -1,0 +1,54 @@
+.members-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    h1 { margin: 0; }
+  }
+
+  .add-form-card {
+    margin-bottom: 24px;
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+      @media (max-width: 600px) { grid-template-columns: 1fr; }
+    }
+  }
+
+  .members-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .member-card {
+    &.inactive { opacity: 0.6; }
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #3f51b5;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    .member-meta {
+      div { display: flex; align-items: center; gap: 8px; margin: 6px 0; font-size: 0.9rem; color: #555; }
+      mat-icon { font-size: 18px; width: 18px; height: 18px; color: #888; }
+    }
+    .expired { color: #c62828 !important; }
+    .valid { color: #2e7d32 !important; }
+    .chip-active { background: #e8f5e9 !important; color: #2e7d32 !important; }
+    .chip-inactive { background: #ffebee !important; color: #c62828 !important; }
+  }
+}

@@ -1,0 +1,70 @@
+<div class="detail-container">
+  <div *ngIf="isLoading" class="loading"><mat-spinner></mat-spinner></div>
+
+  <div *ngIf="!isLoading && book">
+    <button mat-stroked-button (click)="goBack()" class="back-btn">
+      <mat-icon>arrow_back</mat-icon> Back to Books
+    </button>
+
+    <div class="detail-layout">
+      <!-- Book Info Card -->
+      <mat-card class="info-card">
+        <mat-card-header>
+          <mat-card-title>{{ book.title }}</mat-card-title>
+          <mat-card-subtitle>by {{ book.author }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="badges">
+            <mat-chip color="primary" selected>{{ book.genre }}</mat-chip>
+            <mat-chip *ngIf="book.isPopular" color="warn" selected>🔥 Popular</mat-chip>
+            <mat-chip [ngClass]="book.availableCopies > 0 ? 'chip-available' : 'chip-unavailable'">
+              {{ book.availableCopies > 0 ? '✅ Available' : '❌ Not Available' }}
+            </mat-chip>
+          </div>
+          <p class="description">{{ book.description }}</p>
+          <mat-divider></mat-divider>
+          <div class="meta-grid">
+            <div><span class="label">ISBN</span><span>{{ book.isbn }}</span></div>
+            <div><span class="label">Published</span><span>{{ book.publishedYear }}</span></div>
+            <div><span class="label">Rating</span><span>⭐ {{ book.rating }}/5</span></div>
+            <div><span class="label">Available</span>
+              <span [ngClass]="book.availableCopies > 0 ? 'text-green' : 'text-red'">
+                {{ book.availableCopies }} / {{ book.totalCopies }} copies
+              </span>
+            </div>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" [disabled]="book.availableCopies === 0"
+            [routerLink]="['/borrow']" [queryParams]="{ bookId: book.id }">
+            <mat-icon>library_add</mat-icon> Borrow This Book
+          </button>
+          <button mat-stroked-button [routerLink]="['/return']">
+            <mat-icon>undo</mat-icon> Return a Book
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+      <!-- Transaction History -->
+      <mat-card class="history-card">
+        <mat-card-header>
+          <mat-card-title>Transaction History</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngIf="transactions.length === 0" class="empty">No transactions yet.</div>
+          <mat-list>
+            <mat-list-item *ngFor="let t of transactions"
+              [appOverdueHighlight]="t" class="transaction-item">
+              <mat-icon matListItemIcon [ngClass]="t.status === 'returned' ? 'icon-green' : 'icon-orange'">
+                {{ t.status === 'returned' ? 'check_circle' : 'pending' }}
+              </mat-icon>
+              <div matListItemTitle>Member #{{ t.memberId }} — {{ t.status | uppercase }}</div>
+              <div matListItemLine>Borrowed: {{ t.borrowDate | date }} | Due: {{ t.dueDate | date }}</div>
+              <div matListItemLine *ngIf="t.returnDate">Returned: {{ t.returnDate | date }}</div>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

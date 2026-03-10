@@ -1,0 +1,66 @@
+<div class="return-container">
+  <h1>↩️ Return a Book</h1>
+  <p class="subtitle">Select an active borrowing record and confirm the return.</p>
+
+  <div class="layout">
+    <mat-card class="form-card">
+      <mat-card-header>
+        <mat-card-title>Return Form</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="returnForm" (ngSubmit)="onSubmit()">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Select Active Borrow</mat-label>
+            <mat-select formControlName="transactionId">
+              <mat-option *ngFor="let txn of activeTransactions" [value]="txn.id">
+                {{ getBookTitle(txn.bookId) }} — Member #{{ txn.memberId }}
+                <span [ngClass]="isOverdue(txn.dueDate) ? 'overdue' : 'ontime'">
+                  (Due: {{ txn.dueDate | date }})
+                </span>
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="returnForm.get('transactionId')?.hasError('required') && returnForm.get('transactionId')?.touched">
+              Please select a transaction
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Return Date</mat-label>
+            <input matInput type="date" formControlName="returnDate">
+            <mat-error *ngIf="returnForm.get('returnDate')?.hasError('required') && returnForm.get('returnDate')?.touched">
+              Return date is required
+            </mat-error>
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" type="submit"
+            [disabled]="returnForm.invalid || isSubmitting" class="submit-btn">
+            <mat-icon>undo</mat-icon>
+            {{ isSubmitting ? 'Processing...' : 'Confirm Return' }}
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Active Borrows Table -->
+    <mat-card>
+      <mat-card-header><mat-card-title>Active Borrows</mat-card-title></mat-card-header>
+      <mat-card-content>
+        <div *ngIf="activeTransactions.length === 0" class="empty">
+          <mat-icon>check_circle</mat-icon>
+          <p>No active borrows at the moment!</p>
+        </div>
+        <mat-list>
+          <mat-list-item *ngFor="let txn of activeTransactions" class="txn-item"
+            [ngClass]="isOverdue(txn.dueDate) ? 'overdue-item' : ''">
+            <mat-icon matListItemIcon [ngClass]="isOverdue(txn.dueDate) ? 'icon-red' : 'icon-orange'">
+              {{ isOverdue(txn.dueDate) ? 'warning' : 'schedule' }}
+            </mat-icon>
+            <div matListItemTitle>{{ getBookTitle(txn.bookId) }}</div>
+            <div matListItemLine>Member #{{ txn.memberId }} | Due: {{ txn.dueDate | date:'mediumDate' }}</div>
+            <div matListItemLine *ngIf="isOverdue(txn.dueDate)" class="overdue-text">⚠️ OVERDUE</div>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

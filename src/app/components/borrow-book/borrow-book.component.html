@@ -1,0 +1,83 @@
+<div class="borrow-container">
+  <h1>📖 Borrow a Book</h1>
+  <p class="subtitle">Fill in the details below to borrow a book from the library.</p>
+
+  <div class="layout">
+    <!-- Reactive Form -->
+    <mat-card class="form-card">
+      <mat-card-header>
+        <mat-card-title>Borrowing Form</mat-card-title>
+        <mat-card-subtitle>All fields are required</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="borrowForm" (ngSubmit)="onSubmit()">
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Select Book</mat-label>
+            <mat-select formControlName="bookId">
+              <mat-option *ngFor="let book of availableBooks" [value]="book.id">
+                {{ book.title }} — {{ book.author }}
+                <span class="copies-badge">({{ book.availableCopies }} copies left)</span>
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="borrowForm.get('bookId')?.hasError('required') && borrowForm.get('bookId')?.touched">
+              Please select a book
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Select Member</mat-label>
+            <mat-select formControlName="memberId">
+              <mat-option *ngFor="let member of members" [value]="member.id">
+                {{ member.name }} ({{ member.email }})
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="borrowForm.get('memberId')?.hasError('required') && borrowForm.get('memberId')?.touched">
+              Please select a member
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Due Date</mat-label>
+            <input matInput type="date" formControlName="dueDate" [min]="minDate">
+            <mat-error *ngIf="borrowForm.get('dueDate')?.hasError('required') && borrowForm.get('dueDate')?.touched">
+              Due date is required
+            </mat-error>
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" type="submit"
+            [disabled]="borrowForm.invalid || isSubmitting" class="submit-btn">
+            <mat-icon>library_add</mat-icon>
+            {{ isSubmitting ? 'Processing...' : 'Confirm Borrow' }}
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Selected Book Preview -->
+    <mat-card class="preview-card" *ngIf="getSelectedBook() as book">
+      <mat-card-header>
+        <mat-card-title>Selected Book</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <h3>{{ book.title }}</h3>
+        <p class="author">by {{ book.author }}</p>
+        <mat-chip-listbox>
+          <mat-chip>{{ book.genre }}</mat-chip>
+          <mat-chip class="chip-available">{{ book.availableCopies }} available</mat-chip>
+        </mat-chip-listbox>
+        <p class="desc">{{ book.description }}</p>
+        <mat-divider></mat-divider>
+        <p class="rating">⭐ {{ book.rating }}/5 &nbsp; | &nbsp; Published: {{ book.publishedYear }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- No books available -->
+    <mat-card class="preview-card empty" *ngIf="availableBooks.length === 0">
+      <mat-card-content>
+        <mat-icon class="empty-icon">menu_book</mat-icon>
+        <p>No books currently available for borrowing.</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
